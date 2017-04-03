@@ -461,7 +461,10 @@ PlayerSettings:
   XboxOneAllowedProductIds: []
   XboxOnePersistentLocalStorageSize: 0
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Build: 0
+    Collab: 0
+    UNet: 1
   cloudProjectId: 60824f85-a0e7-47b8-86de-518f29ab571c
   projectName: FPS
   organizationId: matsuda_shota
