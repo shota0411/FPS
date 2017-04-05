@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
+using UnityEngine.UI;
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
@@ -27,6 +28,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
+        [SerializeField] private AudioClip m_ShootingSound;
 
         private Camera m_Camera;
         private bool m_Jump;
@@ -41,11 +43,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
-        private bool m_crouching;
+        private bool m_Crouching;
         // Use this for initialization
 
         GameObject character;
-        float default_walk_speed, default_run_speed;
+        float m_Default_walk_speed, m_Default_run_speed;
+        public Text[] text = new Text[2];
 
 
         private void Start(){
@@ -59,19 +62,31 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
-			default_walk_speed = m_WalkSpeed;
-			default_run_speed = m_RunSpeed;
-			m_crouching = false;
+			m_Default_walk_speed = m_WalkSpeed;
+			m_Default_run_speed = m_RunSpeed;
+			m_Crouching = false;
         }
 			
 
         // Update is called once per frame
         private void Update(){
-				if (Input.GetKey (KeyCode.C)) {
-					m_crouching = true;
-				} else {
-					m_crouching = false;
-				}
+            if (Input.GetKey (KeyCode.C)) {
+                m_Crouching = true;
+            } else {
+                m_Crouching = false;
+            }
+
+            if (Input.GetButtonDown ("Fire1")) {
+                Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast (ray, out hit)) {
+                    GameObject selectedObj = hit.collider.gameObject;
+                    print (selectedObj.name);
+                    PlayShootingSound();
+                }
+            }
+                
 
             RotateView();
             // the jump state needs to read here to make sure it is not missed
@@ -100,7 +115,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             m_AudioSource.clip = m_LandSound;
             m_AudioSource.Play();
-            m_NextStep = m_StepCycle + .5f;
+            m_NextStep = m_StepCycle + 0.5f;
         }
 
 
@@ -150,6 +165,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             m_AudioSource.clip = m_JumpSound;
             m_AudioSource.Play();
+        }
+
+        private void PlayShootingSound(){
+            m_AudioSource.clip = m_ShootingSound;
+            m_AudioSource.Play ();
         }
 
 
@@ -210,7 +230,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 newCameraPosition.y = m_OriginalCameraPosition.y - m_JumpBob.Offset();
             }
 
-			if(m_crouching == true) {
+			if(m_Crouching == true) {
 				newCameraPosition = new Vector3 (0f, newCameraPosition.y - 1.0f, 0f);
 			}
 
@@ -249,11 +269,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
             }
                 
-            if (m_crouching == true) {
-				m_WalkSpeed = default_walk_speed * 0.3f;
+            if (m_Crouching == true) {
+				m_WalkSpeed = m_Default_walk_speed * 0.3f;
 			} else {
-				m_WalkSpeed = default_walk_speed;
-				m_RunSpeed = default_run_speed;
+				m_WalkSpeed = m_Default_walk_speed;
+				m_RunSpeed = m_Default_run_speed;
 			}
         }
 
