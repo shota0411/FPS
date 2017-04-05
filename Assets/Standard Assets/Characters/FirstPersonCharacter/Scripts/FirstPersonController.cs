@@ -38,7 +38,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_PreviouslyGrounded;
         private Vector3 m_OriginalCameraPosition;
         private float m_StepCycle;
-		private float m_NextStep;
+        private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
         private bool m_crouching;
@@ -115,7 +115,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             RaycastHit hitInfo;
             Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
                                m_CharacterController.height/2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
-			desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal.normalized);
+            desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal.normalized);
 
             m_MoveDir.x = desiredMove.x*speed;
             m_MoveDir.z = desiredMove.z*speed;
@@ -248,8 +248,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 StopAllCoroutines();
                 StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
             }
-
-			if (m_crouching == true) {
+                
+            if (m_crouching == true) {
 				m_WalkSpeed = default_walk_speed * 0.3f;
 			} else {
 				m_WalkSpeed = default_walk_speed;
