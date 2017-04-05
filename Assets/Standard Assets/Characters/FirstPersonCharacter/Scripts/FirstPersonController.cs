@@ -6,12 +6,12 @@ using Random = UnityEngine.Random;
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
-    [RequireComponent(typeof (CharacterController))]
+    [RequireComponent(typeof (CharacterController))]	// スクリプトを自動でアタッチ
     [RequireComponent(typeof (AudioSource))]
     public class FirstPersonController : MonoBehaviour
     {
         [SerializeField] private bool m_IsWalking;
-        [SerializeField] private float m_WalkSpeed;
+		[SerializeField] private float m_WalkSpeed;
         [SerializeField] private float m_RunSpeed;
         [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
         [SerializeField] private float m_JumpSpeed;
@@ -41,10 +41,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
-
+        private bool m_crouching;
         // Use this for initialization
-        private void Start()
-        {
+
+        GameObject character;
+        float default_walk_speed, default_run_speed;
+
+
+        private void Start(){
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
             m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -55,12 +59,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+			default_walk_speed = m_WalkSpeed;
+			default_run_speed = m_RunSpeed;
+			m_crouching = false;
         }
-
+			
 
         // Update is called once per frame
-        private void Update()
-        {
+        private void Update(){
+				if (Input.GetKey (KeyCode.C)) {
+					m_crouching = true;
+				} else {
+					m_crouching = false;
+				}
+
             RotateView();
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
@@ -103,7 +115,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             RaycastHit hitInfo;
             Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
                                m_CharacterController.height/2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
-            desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
+            desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal.normalized);
 
             m_MoveDir.x = desiredMove.x*speed;
             m_MoveDir.z = desiredMove.z*speed;
@@ -197,6 +209,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 newCameraPosition = m_Camera.transform.localPosition;
                 newCameraPosition.y = m_OriginalCameraPosition.y - m_JumpBob.Offset();
             }
+
+			if(m_crouching == true) {
+				newCameraPosition = new Vector3 (0f, newCameraPosition.y - 1.0f, 0f);
+			}
+
             m_Camera.transform.localPosition = newCameraPosition;
         }
 
@@ -231,6 +248,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 StopAllCoroutines();
                 StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
             }
+                
+            if (m_crouching == true) {
+				m_WalkSpeed = default_walk_speed * 0.3f;
+			} else {
+				m_WalkSpeed = default_walk_speed;
+				m_RunSpeed = default_run_speed;
+			}
         }
 
 
