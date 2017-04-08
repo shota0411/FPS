@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
@@ -44,11 +45,19 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
         private bool m_Crouching;
+        private float range = 20;
+        public GameObject lineObject;
+        private float width = 0.01f;
+        public Transform muzzle;
         // Use this for initialization
 
         GameObject character;
         float m_Default_walk_speed, m_Default_run_speed;
-        public Text[] text = new Text[2];
+        int bullet = 30;
+        int bullet_box = 150;
+        public Text[] text_gun_num;
+        RaycastHit hit;
+        LineRenderer lineRenderer;
 
 
         private void Start(){
@@ -65,11 +74,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			m_Default_walk_speed = m_WalkSpeed;
 			m_Default_run_speed = m_RunSpeed;
 			m_Crouching = false;
+            GameObject l = Instantiate (lineObject, muzzle.position, Quaternion.identity) as GameObject;
+            lineRenderer = l.GetComponent<LineRenderer>();
+            lineRenderer.SetVertexCount (2);
+            lineRenderer.SetWidth (width, width);
+            lineRenderer.SetColors (Color.green, Color.green);
         }
 			
 
         // Update is called once per frame
         private void Update(){
+            SetLaser ();
+            Shooting_gun ();
             if (Input.GetKey (KeyCode.C)) {
                 m_Crouching = true;
             } else {
@@ -77,16 +93,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 
             if (Input.GetButtonDown ("Fire1")) {
+                Shooting_gun ();
+                PlayShootingSound ();
                 Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
                 RaycastHit hit;
 
                 if (Physics.Raycast (ray, out hit)) {
                     GameObject selectedObj = hit.collider.gameObject;
+                    Shooting_gun ();
+
                     print (selectedObj.name);
-                    PlayShootingSound();
                 }
             }
-                
+
+
 
             RotateView();
             // the jump state needs to read here to make sure it is not missed
@@ -110,6 +130,31 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
         }
 
+        private void changeText_GunNum(int num){
+            foreach (Text t in text_gun_num) {
+                if (t != null) {
+                    t.text = "Bullet:" + num;
+                }
+            }
+        }
+
+        private void Shooting_gun(){
+            if(Physics.Raycast(muzzle.position, muzzle.forward,out hit, range)){
+                if (hit.transform.tag == "Enemy") {
+                    hit.transform.SendMessage ("Damage");
+                }
+            }
+        }
+
+        private void SetLaser(){
+            Vector3 start;
+            start = muzzle.position;
+            lineRenderer.SetPosition (0, start);
+
+            Vector3 end;
+            end = start + (muzzle.forward * range);
+            lineRenderer.SetPosition (1, end);
+        }
 
         private void PlayLandingSound()
         {
