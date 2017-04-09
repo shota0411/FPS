@@ -49,15 +49,19 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public GameObject lineObject;
         private float width = 0.01f;
         public Transform muzzle;
+        private int shotCount;
+        private int BulletBoxCount;
         // Use this for initialization
 
         GameObject character;
         float m_Default_walk_speed, m_Default_run_speed;
         int bullet = 30;
         int bullet_box = 150;
-        public Text[] text_gun_num;
+        public Text BulletText ;
+        public Text BulletBoxText;
         RaycastHit hit;
         LineRenderer lineRenderer;
+        public GameObject gun_fire;
 
 
         private void Start(){
@@ -79,6 +83,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             lineRenderer.SetVertexCount (2);
             lineRenderer.SetWidth (width, width);
             lineRenderer.SetColors (Color.green, Color.green);
+            shotCount = 30;
+            BulletBoxCount = 150;
+            BulletText.text = "Bullet: " + shotCount + "/30";
+            BulletBoxText.text = "BulletBox: " + BulletBoxCount;
+
         }
 			
 
@@ -93,17 +102,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 
             if (Input.GetButtonDown ("Fire1")) {
-                Shooting_gun ();
-                PlayShootingSound ();
-                Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast (ray, out hit)) {
-                    GameObject selectedObj = hit.collider.gameObject;
+                if (shotCount > 0) {
                     Shooting_gun ();
-
-                    print (selectedObj.name);
+                    PlayShootingSound ();
+                    shotCount -= 1;
+                    BulletText.text = "Bullet: " + shotCount + "/30";
                 }
+//                Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+//                RaycastHit hit;
+//
+//                if (Physics.Raycast (ray, out hit)) {
+//                    GameObject selectedObj = hit.collider.gameObject;
+//                    Shooting_gun ();
+//
+//                    print (selectedObj.name);
+//                }
             }
 
 
@@ -131,17 +144,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
 
         private void changeText_GunNum(int num){
-            foreach (Text t in text_gun_num) {
-                if (t != null) {
-                    t.text = "Bullet:" + num;
-                }
-            }
+            BulletText.text = "BulletBox: " + shotCount;
         }
 
         private void Shooting_gun(){
             if(Physics.Raycast(muzzle.position, muzzle.forward,out hit, range)){
                 if (hit.transform.tag == "Enemy") {
                     hit.transform.SendMessage ("Damage");
+                    Instantiate (gun_fire, new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0),Quaternion.identity);
                 }
             }
         }
