@@ -29,7 +29,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
-        [SerializeField] private AudioClip m_ShootingSound;
+
 
         private Camera m_Camera;
         private bool m_Jump;
@@ -45,23 +45,12 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
         private bool m_Crouching;
-        private float range = 20;
-        public GameObject lineObject;
-        private float width = 0.01f;
-        public Transform muzzle;
-        private int shotCount;
-        private int BulletBoxCount;
+
+
         // Use this for initialization
 
-        GameObject character;
-        float m_Default_walk_speed, m_Default_run_speed;
-        int bullet = 30;
-        int bullet_box = 150;
-        public Text BulletText ;
-        public Text BulletBoxText;
-        RaycastHit hit;
-        LineRenderer lineRenderer;
-        public GameObject gun_fire;
+        private GameObject character;
+        private float m_Default_walk_speed, m_Default_run_speed;
 
 
         private void Start(){
@@ -78,49 +67,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			m_Default_walk_speed = m_WalkSpeed;
 			m_Default_run_speed = m_RunSpeed;
 			m_Crouching = false;
-            GameObject l = Instantiate (lineObject, muzzle.position, Quaternion.identity) as GameObject;
-            lineRenderer = l.GetComponent<LineRenderer>();
-            lineRenderer.SetVertexCount (2);
-            lineRenderer.SetWidth (width, width);
-            lineRenderer.SetColors (Color.green, Color.green);
-            shotCount = 30;
-            BulletBoxCount = 150;
-            BulletText.text = "Bullet: " + shotCount + "/30";
-            BulletBoxText.text = "BulletBox: " + BulletBoxCount;
 
         }
 			
 
         // Update is called once per frame
         private void Update(){
-            SetLaser ();
-            Shooting_gun ();
             if (Input.GetKey (KeyCode.C)) {
                 m_Crouching = true;
             } else {
                 m_Crouching = false;
             }
-
-            if (Input.GetButtonDown ("Fire1")) {
-                if (shotCount > 0) {
-                    Shooting_gun ();
-                    PlayShootingSound ();
-                    shotCount -= 1;
-                    BulletText.text = "Bullet: " + shotCount + "/30";
-                }
-//                Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-//                RaycastHit hit;
-//
-//                if (Physics.Raycast (ray, out hit)) {
-//                    GameObject selectedObj = hit.collider.gameObject;
-//                    Shooting_gun ();
-//
-//                    print (selectedObj.name);
-//                }
-            }
-
-
-
+                
             RotateView();
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
@@ -143,28 +101,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
         }
 
-        private void changeText_GunNum(int num){
-            BulletText.text = "BulletBox: " + shotCount;
-        }
+       
 
-        private void Shooting_gun(){
-            if(Physics.Raycast(muzzle.position, muzzle.forward,out hit, range)){
-                if (hit.transform.tag == "Enemy") {
-                    hit.transform.SendMessage ("Damage");
-                    Instantiate (gun_fire, new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0),Quaternion.identity);
-                }
-            }
-        }
+       
 
-        private void SetLaser(){
-            Vector3 start;
-            start = muzzle.position;
-            lineRenderer.SetPosition (0, start);
 
-            Vector3 end;
-            end = start + (muzzle.forward * range);
-            lineRenderer.SetPosition (1, end);
-        }
 
         private void PlayLandingSound()
         {
@@ -222,10 +163,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_AudioSource.Play();
         }
 
-        private void PlayShootingSound(){
-            m_AudioSource.clip = m_ShootingSound;
-            m_AudioSource.Play ();
-        }
+
 
 
         private void ProgressStepCycle(float speed)
@@ -284,8 +222,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 newCameraPosition = m_Camera.transform.localPosition;
                 newCameraPosition.y = m_OriginalCameraPosition.y - m_JumpBob.Offset();
             }
-
-			if(m_Crouching == true) {
+          
+            if(m_Crouching == true) {
 				newCameraPosition = new Vector3 (0f, newCameraPosition.y - 1.0f, 0f);
 			}
 
