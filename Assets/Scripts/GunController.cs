@@ -22,7 +22,7 @@ public class GunController : MonoBehaviour {
         Ray ray = new Ray (transform.position, transform.forward);
         RaycastHit hit;
         GameObject instantiated_gun_fire = Instantiate(gun_fire, m_muzzle.position, Quaternion.identity) as GameObject;
-        Destroy (instantiated_gun_fire, 0.01f);
+        Destroy (instantiated_gun_fire, 0.1f);
         if(Physics.Raycast(ray, out hit)){
             GameObject instantiated_firepoint = Instantiate (gun_fire, hit.point, Quaternion.identity);
             Destroy (instantiated_firepoint, 0.3f);
