@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class PlayerController : MonoBehaviour {
     [SerializeField] private int m_shotCount;
     [SerializeField] private int m_BulletBoxCount;
@@ -13,22 +12,15 @@ public class PlayerController : MonoBehaviour {
     private AudioSource m_AudioSource;
     private int m_bullet = 30;
     private int m_bullet_box = 150;
-    private RaycastHit hit;
-    private Ray ray;
-    private float m_range = 20f;
-    private float m_width = 0.01f;
-    private Vector3 cameraCenter = new Vector3 (Screen.width / 2, Screen.height / 2, 0);
     private bool m_gunfire;
 
-
 	// Use this for initialization
-	void Start () {
+    void Start () {
         m_shotCount = 30;
         m_BulletBoxCount = 150;
         BulletText.text = "Bullet: " + m_shotCount + "/30";
         BulletBoxText.text = "BulletBox: " + m_BulletBoxCount;
         m_gunfire = true;
-
 	}
 	
 	// Update is called once per frame
@@ -40,7 +32,7 @@ public class PlayerController : MonoBehaviour {
                 m_shotCount -= 1;
                 BulletText.text = "Bullet: " + m_shotCount + "/30";
                 m_gunfire = false;
-                Invoke ("coolTime", 0.5f);
+                Invoke ("coolTime", 5f);
             }             
         }
 	}

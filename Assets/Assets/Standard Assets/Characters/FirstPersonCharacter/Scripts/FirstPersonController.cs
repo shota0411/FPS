@@ -262,7 +262,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 StartCoroutine(!m_IsWalking ? m_FovKick.FOVKickUp() : m_FovKick.FOVKickDown());
             }
                 
-            if (m_Crouching == true) {
+            if (m_Crouching) {
 				m_WalkSpeed = m_Default_walk_speed * 0.3f;
 			} else {
 				m_WalkSpeed = m_Default_walk_speed;
