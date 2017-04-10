@@ -32,8 +32,12 @@ public class PlayerController : MonoBehaviour {
                 m_shotCount -= 1;
                 BulletText.text = "Bullet: " + m_shotCount + "/30";
                 m_gunfire = false;
-                Invoke ("coolTime", 5f);
+                Invoke ("coolTime", 0.5f);
             }             
+        }
+        if(Input.GetKeyDown(KeyCode.R) && m_shotCount < 30){
+            reloadTime ();
+            gunController.PlayReloadSound ();
         }
 	}
 
@@ -45,4 +49,10 @@ public class PlayerController : MonoBehaviour {
         m_gunfire = true;
     }
 
+    private void reloadTime(){
+        m_BulletBoxCount = m_BulletBoxCount - (30 - m_shotCount);
+        m_shotCount = (30 - m_shotCount) + m_shotCount;
+        BulletText.text = "Bullet: " + m_shotCount + "/30";
+        BulletBoxText.text = "BulletBox: " + m_BulletBoxCount;
+    }
 }

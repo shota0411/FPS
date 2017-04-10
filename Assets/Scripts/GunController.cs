@@ -30,7 +30,7 @@ public class GunController : MonoBehaviour {
         m_AudioSource.clip = m_ShootingSound;
         m_AudioSource.Play ();
     }
-    public void ReloadSound(){
+    public void PlayReloadSound(){
         m_AudioSource.clip = m_ReloadSound;
         m_AudioSource.Play ();
     }
