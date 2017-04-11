@@ -9,12 +9,15 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private Text BulletText;
     [SerializeField] private Text BulletBoxText;
     [SerializeField] private Text ScoreText;
+    [SerializeField] private Text TimeText;
     [SerializeField] private GunController gunController;
     [SerializeField] private TargetController targetController;
     private AudioSource m_AudioSource;
     private bool m_gunfire;
     private int m_score;
     private int m_point;
+    private float m_countTime;
+    private float m_limitTime;
 	// Use this for initialization
 
     private void Start () {
@@ -25,10 +28,13 @@ public class PlayerController : MonoBehaviour {
         BulletBoxText.text = "BulletBox: " + m_BulletBoxCount;
         ScoreText.text = "Pt: " + m_score;
         m_gunfire = true;
+        m_limitTime = 90;
 	}
 	
 	// Update is called once per frame
     private void Update () {
+        m_countTime += Time.deltaTime;
+        TimeText.text = "Time: " + (m_limitTime - m_countTime).ToString ("F2") + "s";
         if (Input.GetButtonDown ("Fire1") && m_gunfire == true) {
             if (m_shotCount > 0) {
                 gunController.Fire ();
