@@ -65,4 +65,6 @@ public class PlayerController : MonoBehaviour {
         m_score += m_point;
         ScoreText.text = "Pt :" + m_score;
     }
+
+
 }

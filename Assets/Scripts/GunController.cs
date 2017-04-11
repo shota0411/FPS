@@ -14,7 +14,6 @@ public class GunController : MonoBehaviour {
     [SerializeField] private TargetController targetController;
     [SerializeField] private PlayerController playerController;
     private AudioSource m_AudioSource;
-    private Vector3 m_range;
     // Use this for initialization
 
     private void Start () {
@@ -24,17 +23,21 @@ public class GunController : MonoBehaviour {
     public void Fire(){
         Ray ray = new Ray (transform.position, transform.forward);
         RaycastHit hit;
-        m_range = transform.forward / 8;
+
         GameObject instantiated_gun_fire = Instantiate(gun_fire, m_muzzle.position , Quaternion.identity) as GameObject;
         Destroy (instantiated_gun_fire, 0.1f);
         if(Physics.Raycast(ray, out hit, 20.0f)){
-            GameObject instantiated_firepoint = Instantiate (gun_fired, hit.point - m_range, Quaternion.identity);
+            GameObject instantiated_firepoint = Instantiate (gun_fired, this.getAdequateDistance(hit.point), Quaternion.identity);
             Destroy (instantiated_firepoint, 0.3f);
             if (hit.collider.tag == "Enemy") {
                 playerController.ScorePlus (hit.point, m_headmarker.transform.position);
                 targetController.Damaged ();
             }
         }
+    }
+
+    public Vector3 getAdequateDistance(Vector3 point){
+        return point - transform.forward / 8;
     }
 
     public void PlayShootingSound(){
