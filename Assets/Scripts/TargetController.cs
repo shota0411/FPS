@@ -6,13 +6,13 @@ public class TargetController : MonoBehaviour {
     private Animator anim;
     private int targetHP;
 	// Use this for initialization
-	void Start () {
+    private void Start () {
         anim = GetComponent<Animator> ();
         targetHP = 5;
 	}
 	
 	// Update is called once per frame
-    public void Damage(){
+    public void Damaged(){
         targetHP -= 1;
         if (targetHP <= 0) {
             CollapseTarget ();

@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour {
     private int m_score;
     private int m_point;
 	// Use this for initialization
-    void Start () {
+    private void Start () {
         m_shotCount = 30;
         m_BulletBoxCount = 150;
         m_score = 0;
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	private void Update () {
         if (Input.GetButtonDown ("Fire1") && m_gunfire == true) {
             if (m_shotCount > 0) {
                 gunController.Fire ();
