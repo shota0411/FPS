@@ -8,17 +8,21 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private int m_BulletBoxCount;
     [SerializeField] private Text BulletText;
     [SerializeField] private Text BulletBoxText;
+    [SerializeField] private Text ScoreText;
     [SerializeField] private GunController gunController;
     [SerializeField] private TargetController targetController;
     private AudioSource m_AudioSource;
     private bool m_gunfire;
-
+    private int m_score;
+    private int m_point;
 	// Use this for initialization
     void Start () {
         m_shotCount = 30;
         m_BulletBoxCount = 150;
+        m_score = 0;
         BulletText.text = "Bullet: " + m_shotCount + "/30";
         BulletBoxText.text = "BulletBox: " + m_BulletBoxCount;
+        ScoreText.text = "Pt: " + m_score;
         m_gunfire = true;
 	}
 	
@@ -32,7 +36,7 @@ public class PlayerController : MonoBehaviour {
                 BulletText.text = "Bullet: " + m_shotCount + "/30";
                 m_gunfire = false;
                 Invoke ("coolTime", 0.5f);
-            }             
+            }
         }
         if(Input.GetKeyDown(KeyCode.R) && m_shotCount < 30){
             reloadTime ();
@@ -53,5 +57,11 @@ public class PlayerController : MonoBehaviour {
         m_shotCount = (30 - m_shotCount) + m_shotCount;
         BulletText.text = "Bullet: " + m_shotCount + "/30";
         BulletBoxText.text = "BulletBox: " + m_BulletBoxCount;
+    }
+
+    public void ScorePlus(Vector3 hitposition, Vector3 targetPosition){
+        m_point = (int)(2 / ((hitposition - targetPosition).magnitude + 1e-4));
+        m_score += m_point;
+        ScoreText.text = "Pt :" + m_score;
     }
 }

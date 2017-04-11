@@ -12,20 +12,20 @@ public class TargetController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-    void Damage(){
+    public void Damage(){
         targetHP -= 1;
         if (targetHP <= 0) {
             CollapseTarget ();
-            Invoke ("StandTarget", 10f);
+            Invoke ("StandTarget", 3f);
         }
             
     }
 
-    void CollapseTarget(){
+    public void CollapseTarget(){
             anim.SetBool ("IsCollapse", true);
     }
 
-    void StandTarget(){
+    public void StandTarget(){
             anim.SetBool ("IsCollapse", false);
             targetHP = 5;
     }
