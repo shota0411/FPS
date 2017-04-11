@@ -5,6 +5,7 @@ using UnityEngine;
 public class GunController : MonoBehaviour {
 
     [SerializeField] private AudioClip m_ShootingSound;
+    [SerializeField] private AudioClip m_ReloadSound;
     [SerializeField] private GameObject gun_fire;
     [SerializeField] private GameObject gun_fired;
     [SerializeField] private Transform m_muzzle;
@@ -12,11 +13,6 @@ public class GunController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         m_AudioSource = GetComponent<AudioSource>();
-    }
-
-    // Update is called once per frame
-    void Update () {
-
     }
 
     public void Fire(){
@@ -32,6 +28,10 @@ public class GunController : MonoBehaviour {
 
     public void PlayShootingSound(){
         m_AudioSource.clip = m_ShootingSound;
+        m_AudioSource.Play ();
+    }
+    public void PlayReloadSound(){
+        m_AudioSource.clip = m_ReloadSound;
         m_AudioSource.Play ();
     }
 }

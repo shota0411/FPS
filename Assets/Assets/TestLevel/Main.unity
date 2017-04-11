@@ -16757,7 +16757,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShootingSound: {fileID: 8300000, guid: 8602b7d5cd15c1943a50aa53f171c8cf, type: 3}
+  m_ReloadSound: {fileID: 8300000, guid: 3c5c1d4d7b9307c458890a4beb12e4ae, type: 3}
   gun_fire: {fileID: 1254622297828040, guid: aa56f9873f27642da8ce1df37277347a, type: 2}
+  gun_fired: {fileID: 1717713224546786, guid: 7c7fc14ff9abe463c8edc64c595b874c, type: 2}
   m_muzzle: {fileID: 1729285460}
 --- !u!82 &1021165297
 AudioSource:
