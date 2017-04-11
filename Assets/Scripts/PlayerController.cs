@@ -9,9 +9,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField] private Text BulletText;
     [SerializeField] private Text BulletBoxText;
     [SerializeField] private GunController gunController;
+    [SerializeField] private TargetController targetController;
     private AudioSource m_AudioSource;
-    private int m_bullet = 30;
-    private int m_bullet_box = 150;
     private bool m_gunfire;
 
 	// Use this for initialization
