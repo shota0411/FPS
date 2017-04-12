@@ -14,20 +14,22 @@ public class GunController : MonoBehaviour {
     [SerializeField] private TargetController targetController;
     [SerializeField] private PlayerController playerController;
     private AudioSource m_AudioSource;
+    private Vector3 m_CameraCenter;
     // Use this for initialization
 
     private void Start () {
         m_AudioSource = GetComponent<AudioSource>();
+        m_CameraCenter = new Vector3 (Screen.width/2, Screen.height/2, 0);
     }
 
     public void Fire(){
-        Ray ray = new Ray (transform.position, transform.forward);
+        Ray ray = Camera.main.ScreenPointToRay (m_CameraCenter);
         RaycastHit hit;
 
         GameObject instantiated_gun_fire = Instantiate(gun_fire, m_muzzle.position , Quaternion.identity) as GameObject;
         Destroy (instantiated_gun_fire, 0.1f);
         if(Physics.Raycast(ray, out hit, 20.0f)){
-            GameObject instantiated_firepoint = Instantiate (gun_fired, this.getAdequateDistance(hit.point), Quaternion.identity);
+            GameObject instantiated_firepoint = Instantiate (gun_fired, getAdequateDistance(hit.point), Quaternion.identity);
             Destroy (instantiated_firepoint, 0.3f);
             if (hit.collider.tag == "Enemy") {
                 playerController.ScorePlus (hit.point, m_headmarker.transform.position);
