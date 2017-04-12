@@ -26,11 +26,11 @@ public class GunController : MonoBehaviour {
         Ray ray = Camera.main.ScreenPointToRay (m_CameraCenter);
         RaycastHit hit;
 
-        GameObject instantiated_gun_fire = Instantiate(gun_fire, m_muzzle.position , Quaternion.identity) as GameObject;
-        Destroy (instantiated_gun_fire, 0.1f);
+        GameObject muzzle_fire = Instantiate(gun_fire, m_muzzle.position , Quaternion.identity) as GameObject;
+        Destroy (muzzle_fire, 0.1f);
         if(Physics.Raycast(ray, out hit, 20.0f)){
-            GameObject instantiated_firepoint = Instantiate (gun_fired, getAdequateDistance(hit.point), Quaternion.identity);
-            Destroy (instantiated_firepoint, 0.3f);
+            GameObject fire_perticle = Instantiate (gun_fired, GetAdequateDistance(hit.point), Quaternion.identity);
+            Destroy (fire_perticle, 0.3f);
             if (hit.collider.tag == "Enemy") {
                 playerController.ScorePlus (hit.point, m_headmarker.transform.position);
                 targetController.Damaged ();
@@ -38,7 +38,7 @@ public class GunController : MonoBehaviour {
         }
     }
 
-    public Vector3 getAdequateDistance(Vector3 point){
+    public Vector3 GetAdequateDistance(Vector3 point){
         return point - transform.forward / 8;
     }
 

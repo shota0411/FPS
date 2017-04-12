@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
-    [SerializeField] private GameObject MainCamera;
     [SerializeField] private Camera m_camera;
     [SerializeField] private int m_shotCount;
     [SerializeField] private int m_BulletBoxCount;
@@ -34,11 +33,10 @@ public class PlayerController : MonoBehaviour {
         BulletBoxText.text = "BulletBox: " + m_BulletBoxCount;
         ScoreText.text = "Pt: " + m_score;
         m_gunfire = true;
-        Reticle.SetActive (true);
         Snipe.SetActive (false);
         Scope.SetActive (false);
         m_snipemode = false;
-	}
+    }
 	
 	// Update is called once per frame
     private void Update () {
@@ -56,7 +54,7 @@ public class PlayerController : MonoBehaviour {
         }
 
         if(Input.GetKeyDown(KeyCode.R) && m_shotCount < 30){
-            reloadTime ();
+            ReloadTime ();
             gunController.PlayReloadSound ();
         }
 
@@ -66,24 +64,24 @@ public class PlayerController : MonoBehaviour {
             Scope.SetActive (true);
             m_snipemode = true;
             m_camera.fieldOfView = 20.0f;
-        }else if(Input.GetButtonDown("Fire2") && m_snipemode == true){
+        } else if (Input.GetButtonDown ("Fire2") && m_snipemode == true) {
             Reticle.SetActive (true);
             Snipe.SetActive (false);
             Scope.SetActive (false);
             m_snipemode = false;
             m_camera.fieldOfView = 70.0f;
         }
-	}
+    }
 
-    private void changeText_GunNum(int num){
+    private void ChangeText_GunNum(int num){
         BulletText.text = "BulletBox: " + m_shotCount;
     }
 
-    private void coolTime(){
+    private void CoolTime(){
         m_gunfire = true;
     }
 
-    private void reloadTime(){
+    private void ReloadTime(){
         m_BulletBoxCount = m_BulletBoxCount - (30 - m_shotCount);
         m_shotCount = (30 - m_shotCount) + m_shotCount;
         BulletText.text = "Bullet: " + m_shotCount + "/30";
