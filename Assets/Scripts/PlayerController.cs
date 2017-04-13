@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour {
                 m_shotCount -= 1;
                 BulletText.text = "Bullet: " + m_shotCount + "/30";
                 m_gunfire = false;
-                Invoke ("coolTime", 0.5f);
+                Invoke ("CoolTime", 0.5f);
             }
         }
 
