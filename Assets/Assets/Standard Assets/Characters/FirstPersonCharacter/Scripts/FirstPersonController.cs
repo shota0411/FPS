@@ -224,7 +224,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
           
             if(m_Crouching == true) {
-				newCameraPosition = new Vector3 (0f, newCameraPosition.y - 1.0f, 0f);
+				newCameraPosition = new Vector3 (0f, newCameraPosition.y - 0.5f, 0f);
 			}
 
             m_Camera.transform.localPosition = newCameraPosition;
